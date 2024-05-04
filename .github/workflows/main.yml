@@ -1,0 +1,40 @@
+name: AndroidCupsPrint
+
+permissions:
+  contents: write
+  actions: write
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'  # 选择你的 JDK 版本
+
+    - name: Build with Gradle
+      run: ./gradlew assembleDebug  # 运行 Gradle 构建命令
+
+    - name: Run Tests
+      run: ./gradlew test  # 运行测试
+
+    - name: Android Build
+  # You may pin to the exact commit or the version.
+  # uses: vgaidarji/android-github-actions-build@0888eff41ad409a802aa4ccd7790a91891da9056
+      uses: vgaidarji/android-github-actions-build@v1.0.1
+          
